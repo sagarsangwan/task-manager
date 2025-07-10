@@ -3,8 +3,17 @@ import { fetchTasksFromApi, updateTasks } from "@/lib/api";
 import React, { useEffect, useState } from "react";
 import Column from "./ui/Column";
 import { toast } from "sonner";
+import { Plus } from "lucide-react";
+import { Button } from "./ui/button";
+import TaskModal from "./TaskModal";
 function TaskManagement() {
   const [tasks, setTasks] = useState([]);
+  const [newTask, setNewTask] = useState({
+    title: "",
+    description: "",
+    deadline: "",
+  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
   console.log(tasks);
 
   const loadTasks = async () => {
@@ -38,6 +47,12 @@ function TaskManagement() {
     toast.success(`${data.title} has been set to ${data.status}`);
     await loadTasks();
   };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    console.log(newTask);
+    return;
+  };
   return (
     <div className="min-h-screen  p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
@@ -69,6 +84,22 @@ function TaskManagement() {
           />
         </div>
       </div>
+      <Button
+        className="fixed bottom-6 right-6 bg-blue-600 text-white rounded-full p-4 shadow-lg"
+        onClick={() => setIsModalOpen(true)}
+      >
+        <Plus />
+      </Button>
+
+      {isModalOpen && (
+        <TaskModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          newTask={newTask}
+          setNewTask={setNewTask}
+          onSubmit={onSubmit}
+        />
+      )}
     </div>
   );
 }
