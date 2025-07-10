@@ -17,6 +17,7 @@ const getLocalDatetimeString = () => {
 };
 function TaskManagement() {
   const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [newTask, setNewTask] = useState({
     title: "",
     description: "",
@@ -44,6 +45,7 @@ function TaskManagement() {
   );
 
   const handleToggleComplete = async (id) => {
+    setLoading(true);
     var cTask = tasks.find((task) => task.id == id);
     cTask.is_completed = !cTask.is_completed;
     const result = await updateTasks(cTask);
@@ -55,10 +57,12 @@ function TaskManagement() {
 
     toast.success(`${data.title} has been set to ${data.status}`);
     await loadTasks();
+    setLoading(false);
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const localDate = new Date(newTask.deadline);
     const utcIsoString = localDate.toISOString();
     const dataToSend = { ...newTask, deadline: utcIsoString };
@@ -77,6 +81,7 @@ function TaskManagement() {
       description: "",
       deadline: getLocalDatetimeString(),
     });
+    setLoading(false);
   };
   return (
     <div className="min-h-screen  p-4 md:p-6">
@@ -123,6 +128,7 @@ function TaskManagement() {
           newTask={newTask}
           setNewTask={setNewTask}
           onSubmit={onSubmit}
+          loading={loading}
         />
       )}
     </div>

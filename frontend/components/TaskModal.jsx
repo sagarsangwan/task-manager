@@ -24,6 +24,7 @@ export default function TaskModal({
   newTask,
   setNewTask,
   onSubmit,
+  loading,
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -100,20 +101,15 @@ export default function TaskModal({
           </div> */}
 
           <div className="flex justify-end gap-3 pt-4">
-            <DialogClose asChild>
-              <button
-                type="button"
-                className="px-4 py-2 bg-gray-100 rounded-md"
-              >
-                Cancel
-              </button>
-            </DialogClose>
             <button
               type="submit"
               className="px-4 py-2 bg-blue-600 text-white rounded-md"
+              disabled={loading} // Optional: Disable the button while loading to prevent multiple submissions
             >
-              Add Task
+              {!loading ? "Add Task" : "Loading..."}{" "}
+              {/* Changed to "Loading..." for better UX */}
             </button>
+            {loading && <p>Adding your task, please wait...</p>}
           </div>
         </form>
       </DialogContent>

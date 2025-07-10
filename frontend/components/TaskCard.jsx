@@ -1,8 +1,10 @@
 "use client";
 import React from "react";
 import { formatReadableDateTime } from "@/lib/utils";
+import { Button } from "./ui/button";
+import { Delete, Trash2 } from "lucide-react";
 
-export default function TaskCard({ task, onToggle }) {
+export default function TaskCard({ task, onToggle, onDelete }) {
   console.log(task.tags);
   const getPriorityColor = (priority) => {
     switch (priority) {
@@ -19,31 +21,45 @@ export default function TaskCard({ task, onToggle }) {
     }
   };
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-shadow">
+    <div className=" rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between mb-3">
-        <div>
-          <h3 className="font-medium text-gray-900 flex-1">{task.title}</h3>
-          <p className=" text-xs text-gray-600">{task.description}</p>
-          {task.tags && task.tags.length > 0 && (
-            <div>
-              {task.tags.map((tag) => (
-                <span
-                  className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-full border border-gray-300"
-                  key={tag.id}
-                >
-                  {tag.name}
-                </span>
-              ))}
-            </div>
+        <div className="flex-1">
+          <h3 className="font-medium text-gray-900">{task.title}</h3>
+          {task.description && (
+            <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+              {task.description}
+            </p>
           )}
         </div>
-        <input
-          type="checkbox"
-          checked={task.is_completed}
-          onChange={() => onToggle(task.id)}
-          className="ml-3 h-4 w-4 text-blue-600 rounded border-gray-300"
-        />
+
+        <div className="flex items-center gap-2 ml-3">
+          <input
+            type="checkbox"
+            checked={task.completed}
+            onChange={() => onToggle(task.id)}
+            className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+          />
+          <button
+            onClick={() => onDelete(task.id)}
+            className="text-gray-400 hover:text-red-500 transition-colors p-1"
+            title="Delete task"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+        </div>
       </div>
+      {task.tags && task.tags.length > 0 && (
+        <div>
+          {task.tags.map((tag) => (
+            <span
+              className="me-1 px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-full border border-gray-300"
+              key={tag.id}
+            >
+              {tag.name}
+            </span>
+          ))}
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <span className="text-sm text-gray-500">
           {formatReadableDateTime(task.deadline)}
@@ -53,7 +69,7 @@ export default function TaskCard({ task, onToggle }) {
             task.priority
           )}`}
         >
-          {task.priority ? task.priority : "no priority set"}
+          {task.priority}
         </span>
       </div>
     </div>
