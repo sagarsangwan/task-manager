@@ -1,5 +1,5 @@
 "use client";
-import { fetchTasksFromApi, updateTasks } from "@/lib/api";
+import { AddNewTask, fetchTasksFromApi, updateTasks } from "@/lib/api";
 import React, { useEffect, useState } from "react";
 import Column from "./ui/Column";
 import { toast } from "sonner";
@@ -11,7 +11,7 @@ function TaskManagement() {
   const [newTask, setNewTask] = useState({
     title: "",
     description: "",
-    deadline: "",
+    deadline: new Date().toISOString(),
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   console.log(tasks);
@@ -50,8 +50,20 @@ function TaskManagement() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(newTask);
-    return;
+    const result = await AddNewTask(newTask);
+    const data = await result.json();
+    if (!result.ok) {
+      toast.error("sorry something went wrong");
+      console.log(data);
+    }
+    toast.success(`${data.title} has been created`);
+    await loadTasks();
+    setIsModalOpen(false);
+    setNewTask({
+      title: "",
+      description: "",
+      deadline: new Date().toISOString(),
+    });
   };
   return (
     <div className="min-h-screen  p-4 md:p-6">
