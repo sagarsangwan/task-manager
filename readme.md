@@ -1,20 +1,22 @@
+---
 
 # Time-Aware Task Manager
 
 This is a full-stack task management application with a smart backend and a responsive frontend.
 It includes:
 
-* A REST API built using Django and Django REST Framework.
-* A frontend interface built with Next.js and styled using ShadCN UI.
-* An AI-powered priority assignment feature using OpenAI.
-* Time-aware task categorization (Upcoming, Missed, Completed).
+* A REST API built using Django and Django REST Framework
+* A frontend interface built with Next.js and styled using ShadCN UI
+* An AI-powered priority assignment feature using Gemini AI
+* An AI-powered task tagging feature to organize tasks
+* Time-aware task categorization (Upcoming, Missed, Completed)
 
 ---
 
 ## Project Structure
 
 ```
-time-aware-task-manager/
+task-manager/
 ├── backend/     # Django + DRF backend
 ├── frontend/    # Next.js + ShadCN UI frontend
 ```
@@ -27,7 +29,7 @@ time-aware-task-manager/
 
 ```bash
 git clone https://github.com/sagarsangwan/task-manager.git
-cd time-aware-task-manager
+cd task-manager
 ```
 
 ---
@@ -41,10 +43,13 @@ source env/bin/activate  # Windows: env\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Create a `.env` file in the `backend/` folder:
+Create a `.env` file in the `backend/` folder: you can see .env.sample for all keys
 
 ```
-OPENAI_API_KEY=your_openai_key_here
+GEMINI_API_KEY=your_gemini_api_key_here
+SECRET_KEY="a key for django any random key will work"
+
+
 ```
 
 Run migrations and start the server:
@@ -54,7 +59,7 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-The backend will be running at `http://localhost:8000/api/tasks/`
+The backend will be running at `http://localhost:8000/api/v1/tasks/`
 
 ---
 
@@ -80,21 +85,38 @@ Each task is automatically assigned one of three statuses:
 * **Missed**: deadline has passed and task is not completed
 * **Completed**: user manually marks the task as completed
 
-This is handled automatically by the backend when tasks are retrieved.
+This logic is handled by the backend and updated in real time when tasks are fetched.
 
 ---
 
 ### AI-Powered Priority Classification
 
-When a new task is created, the backend sends the task's title and description to the OpenAI API.
-The AI classifies the priority as one of the following:
+When a new task is created, the backend sends the task's title and description to the Gemini API.
+The AI then classifies the task's priority as one of the following:
 
 * Low
 * Medium
 * High
 * Critical
 
-This helps users focus on the most important tasks without needing to manually prioritize.
+This helps users focus on the most important work without manually choosing priorities.
+
+---
+
+### AI-Powered Task Tagging
+
+Along with priority, the system also uses AI to generate relevant tags for each task automatically.
+This makes tasks easier to search and organize.
+
+Tags are selected from a predefined list:
+
+`[Work, Personal, Health, Finance, Learning, Urgent, Shopping]`
+
+When a task is created:
+
+* The title and description are sent to the Gemini API
+* Gemini returns up to 3 tags
+* The backend associates those tags with the task
 
 ---
 
@@ -102,32 +124,25 @@ This helps users focus on the most important tasks without needing to manually p
 
 The frontend allows users to:
 
-* View tasks in three separate columns: Upcoming, Completed, and Missed
-* Add a new task using a modal with:
+* View tasks in three columns: Upcoming, Completed, and Missed
+* Add new tasks with a modal that includes:
 
   * Title input
-  * ShadCN calendar date picker
+  * Description Input
   * Time input field
-* Mark a task as completed using a checkbox
-* See the deadline and priority for each task
-
-The interface is responsive and works well on both desktop and mobile.
+* View assigned priority and tags
+* Mark tasks as completed
+* Responsive layout for both mobile and desktop
 
 ---
 
 ## API Overview
 
-* `GET /api/tasks/`: List all tasks
-* `POST /api/tasks/`: Create a new task
-* `GET /api/tasks/<id>/`: Retrieve a single task
-* `PUT /api/tasks/<id>/`: Update a task
-* `DELETE /api/tasks/<id>/`: Delete a task
-
-Query parameters supported:
-
-* `?priority=High`
-* `?ordering=-deadline`
-* `?search=keyword`
+* `GET /api/v1/tasks/`: List all tasks
+* `POST /api/v1/tasks/`: Create a new task (AI tags and priority are applied automatically)
+* `GET /api/v1/tasks/<id>/`: Retrieve a single task
+* `PUT /api/v1/tasks/<id>/`: Update a task
+* `DELETE /api/v1/tasks/<id>/`: Delete a task
 
 ---
 
@@ -135,17 +150,23 @@ Query parameters supported:
 
 **Backend:**
 
-* Python 
+* Python
 * Django
 * Django REST Framework
-* OpenAI Python SDK
+* Google Generative AI SDK (Gemini)
 
 **Frontend:**
 
 * React.js
-* Next.js  (App Router )
+* Next.js (App Router)
 * Tailwind CSS
 * ShadCN UI
+
+---
+
+## Creator
+
+This project was built by **sagarsangwan**.
 
 ---
 
