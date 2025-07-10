@@ -6,12 +6,21 @@ import { toast } from "sonner";
 import { Plus } from "lucide-react";
 import { Button } from "./ui/button";
 import TaskModal from "./TaskModal";
+const getLocalDatetimeString = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+};
 function TaskManagement() {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState({
     title: "",
     description: "",
-    deadline: new Date().toISOString(),
+    deadline: getLocalDatetimeString(),
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   console.log(tasks);
@@ -50,7 +59,11 @@ function TaskManagement() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const result = await AddNewTask(newTask);
+    const localDate = new Date(newTask.deadline);
+    const utcIsoString = localDate.toISOString();
+    const dataToSend = { ...newTask, deadline: utcIsoString };
+    const result = await AddNewTask(dataToSend);
+
     const data = await result.json();
     if (!result.ok) {
       toast.error("sorry something went wrong");
@@ -62,7 +75,7 @@ function TaskManagement() {
     setNewTask({
       title: "",
       description: "",
-      deadline: new Date().toISOString(),
+      deadline: getLocalDatetimeString(),
     });
   };
   return (

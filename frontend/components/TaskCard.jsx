@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { formatDateTimeLocalValue } from "./TaskModal";
 import { formatReadableDateTime } from "@/lib/utils";
 
 export default function TaskCard({ task, onToggle }) {
@@ -21,7 +20,10 @@ export default function TaskCard({ task, onToggle }) {
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between mb-3">
-        <h3 className="font-medium text-gray-900 flex-1">{task.title}</h3>
+        <div>
+          <h3 className="font-medium text-gray-900 flex-1">{task.title}</h3>
+          <p className=" text-xs text-gray-600">{task.description}</p>
+        </div>
         <input
           type="checkbox"
           checked={task.is_completed}

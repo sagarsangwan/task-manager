@@ -62,24 +62,24 @@ export default function TaskModal({
             />
           </div>
 
-          {/* <div>
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Deadline
             </label>
             <input
               type="datetime-local"
-              value={newTask.deadline}
+              value={newTask.deadline.substring(0, 16)}
               onChange={(e) =>
                 setNewTask({ ...newTask, deadline: e.target.value })
               }
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
             />
-          </div> */}
-          <DateTimeInput
+          </div>
+          {/* <DateTimeInput
             deadline={newTask.deadline}
             setDeadline={(value) => setNewTask({ ...newTask, deadline: value })}
-          />
+          /> */}
 
           {/* <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
