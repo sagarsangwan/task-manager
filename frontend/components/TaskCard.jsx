@@ -3,6 +3,7 @@ import React from "react";
 import { formatReadableDateTime } from "@/lib/utils";
 
 export default function TaskCard({ task, onToggle }) {
+  console.log(task.tags);
   const getPriorityColor = (priority) => {
     switch (priority) {
       case "Critical":
@@ -23,6 +24,18 @@ export default function TaskCard({ task, onToggle }) {
         <div>
           <h3 className="font-medium text-gray-900 flex-1">{task.title}</h3>
           <p className=" text-xs text-gray-600">{task.description}</p>
+          {task.tags && task.tags.length > 0 && (
+            <div>
+              {task.tags.map((tag) => (
+                <span
+                  className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-full border border-gray-300"
+                  key={tag.id}
+                >
+                  {tag.name}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
         <input
           type="checkbox"
