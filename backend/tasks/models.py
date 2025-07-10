@@ -2,6 +2,13 @@ from django.db import models
 from django.utils import timezone
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Task(models.Model):
     PRIORITY_CHOICES = [
         ("Low", "Low"),
@@ -15,6 +22,7 @@ class Task(models.Model):
     deadline = models.DateTimeField()
     is_completed = models.BooleanField(default=False)
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True)
 
     @property
     def status(self):

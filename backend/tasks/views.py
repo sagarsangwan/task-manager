@@ -1,8 +1,8 @@
 from rest_framework import viewsets
-from .models import Task
+from .models import Task, Tag
 from .serializers import TaskSerializer
 
-from .responseFromAi import classify_priority
+from .responseFromAi import classify_priority, get_tags_from_gemini
 
 
 class TaskViewSet(viewsets.ModelViewSet):
@@ -17,4 +17,13 @@ class TaskViewSet(viewsets.ModelViewSet):
         task.priority = (
             priority if priority in dict(Task.PRIORITY_CHOICES) else "Medium"
         )
+        tag_names = get_tags_from_gemini(task.title, task.description)
+        print(
+            tag_names,
+            "respnse from aiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii tag_names",
+        )
+
+        for name in tag_names:
+            tag_obj, created = Tag.objects.get_or_create(name=name)
+            task.tags.add(tag_obj)
         task.save()
