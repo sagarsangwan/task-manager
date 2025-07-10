@@ -1,5 +1,10 @@
 "use client";
-import { AddNewTask, fetchTasksFromApi, updateTasks } from "@/lib/api";
+import {
+  AddNewTask,
+  deleteTask,
+  fetchTasksFromApi,
+  updateTasks,
+} from "@/lib/api";
 import React, { useEffect, useState } from "react";
 import Column from "./ui/Column";
 import { toast } from "sonner";
@@ -59,10 +64,29 @@ function TaskManagement() {
     await loadTasks();
     setLoading(false);
   };
+  const handleDelete = async (id) => {
+    toast.info("Deleting task...");
 
+    try {
+      const res = await deleteTask(id);
+      // const data = await res.json();
+      if (!res.ok) {
+        toast.error("sorry something went wrong");
+        // console.log(data);
+      }
+      toast.success("Task has been deleted.");
+    } catch (error) {
+      console.error("Network or unexpected error during delete:", error);
+      toast.error("An unexpected error occurred while deleting the task.");
+    } finally {
+      setLoading(false);
+      loadTasks();
+    }
+  };
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    toast.info("Creating task...");
     const localDate = new Date(newTask.deadline);
     const utcIsoString = localDate.toISOString();
     const dataToSend = { ...newTask, deadline: utcIsoString };
@@ -95,18 +119,21 @@ function TaskManagement() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Column
+            onDelete={handleDelete}
             title="Upcoming"
             tasks={upcoming}
             count={upcoming.length}
             onToggle={handleToggleComplete}
           />
           <Column
+            onDelete={handleDelete}
             title="Completed"
             tasks={completed}
             count={completed.length}
             onToggle={handleToggleComplete}
           />
           <Column
+            onDelete={handleDelete}
             title="Missed"
             tasks={missed}
             count={missed.length}

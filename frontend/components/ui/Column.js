@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import TaskCard from "../TaskCard";
-function Column({ title, tasks, count, onToggle }) {
+function Column({ title, tasks, count, onToggle, onDelete }) {
   return (
     <div className="flex-1 min-w-0">
       <div className="mb-4">
@@ -11,7 +11,12 @@ function Column({ title, tasks, count, onToggle }) {
       <div className="space-y-3">
         {tasks.length > 0 ? (
           tasks.map((task) => (
-            <TaskCard key={task.id} task={task} onToggle={onToggle} />
+            <TaskCard
+              key={task.id}
+              task={task}
+              onToggle={onToggle}
+              onDelete={onDelete}
+            />
           ))
         ) : (
           <div className="text-center py-8 text-gray-400">

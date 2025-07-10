@@ -28,3 +28,10 @@ export async function AddNewTask(newTask) {
   console.log(res);
   return res;
 }
+export async function deleteTask(taskId) {
+  const res = await fetch(`${API_URL}${taskId}/`, {
+    method: "DELETE",
+  });
+  console.log(res);
+  return res;
+}
