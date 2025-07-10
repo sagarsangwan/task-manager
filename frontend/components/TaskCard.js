@@ -1,5 +1,7 @@
 "use client";
 import React from "react";
+import { formatDateTimeLocalValue } from "./TaskModal";
+import { formatReadableDateTime } from "@/lib/utils";
 
 export default function TaskCard({ task, onToggle }) {
   const getPriorityColor = (priority) => {
@@ -28,7 +30,9 @@ export default function TaskCard({ task, onToggle }) {
         />
       </div>
       <div className="flex items-center justify-between">
-        <span className="text-sm text-gray-500">{task.deadline}</span>
+        <span className="text-sm text-gray-500">
+          {formatReadableDateTime(task.deadline)}
+        </span>
         <span
           className={`px-2 py-1 text-xs font-medium rounded-full border ${getPriorityColor(
             task.priority

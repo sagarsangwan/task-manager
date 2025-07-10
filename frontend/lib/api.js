@@ -16,3 +16,15 @@ export async function updateTasks(taskData) {
   console.log(res);
   return res;
 }
+
+export async function AddNewTask(newTask) {
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newTask),
+  });
+  console.log(res);
+  return res;
+}
