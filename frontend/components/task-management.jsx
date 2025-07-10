@@ -18,11 +18,11 @@ function TaskManagement() {
   }, []);
 
   const upcoming = tasks.filter(
-    (task) => !task.is_completed && task.status == "Upcoming"
+    (task) => !task.is_completed && task.status === "Upcoming"
   );
   const completed = tasks.filter((task) => task.is_completed);
   const missed = tasks.filter(
-    (task) => !task.is_completed && task.status == "missed"
+    (task) => !task.is_completed && task.status === "Missed"
   );
 
   const handleToggleComplete = async (id) => {
