@@ -1,7 +1,8 @@
 "use client";
-import { fetchTasksFromApi } from "@/lib/api";
+import { fetchTasksFromApi, updateTasks } from "@/lib/api";
 import React, { useEffect, useState } from "react";
 import Column from "./ui/Column";
+import { toast } from "sonner";
 function TaskManagement() {
   const [tasks, setTasks] = useState([]);
   console.log(tasks);
@@ -24,8 +25,18 @@ function TaskManagement() {
     (task) => !task.is_completed && task.status == "missed"
   );
 
-  const handleToggleComplete = (id) => {
-    return;
+  const handleToggleComplete = async (id) => {
+    var cTask = tasks.find((task) => task.id == id);
+    cTask.is_completed = !cTask.is_completed;
+    const result = await updateTasks(cTask);
+    const data = await result.json();
+    if (!result.ok) {
+      toast.error("sorry something went wrong");
+      console.log(data);
+    }
+
+    toast.success(`${data.title} has been set to ${data.status}`);
+    await loadTasks();
   };
   return (
     <div className="min-h-screen  p-4 md:p-6">
