@@ -1,19 +1,65 @@
 "use client";
 import { fetchTasksFromApi } from "@/lib/api";
 import React, { useEffect, useState } from "react";
-
+import Column from "./ui/Column";
 function TaskManagement() {
-  const [Tasks, setTasks] = useState([]);
-  console.log(Tasks);
+  const [tasks, setTasks] = useState([]);
+  console.log(tasks);
+
+  const loadTasks = async () => {
+    const data = await fetchTasksFromApi();
+    setTasks(data);
+    console.log(data);
+  };
+
   useEffect(() => {
-    const fetchFromApi = async () => {
-      const res = await fetchTasksFromApi();
-      setTasks(res);
-      console.log(res, ";;;;;;;;;;;;;;;;;;;;;;;;");
-    };
-    fetchFromApi();
+    loadTasks();
   }, []);
-  return <div>hii</div>;
+
+  const upcoming = tasks.filter(
+    (task) => !task.is_completed && task.status == "Upcoming"
+  );
+  const completed = tasks.filter((task) => task.is_completed);
+  const missed = tasks.filter(
+    (task) => !task.is_completed && task.status == "missed"
+  );
+
+  const handleToggleComplete = (id) => {
+    return;
+  };
+  return (
+    <div className="min-h-screen  p-4 md:p-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold mb-2">Task Management</h1>
+          <p className="text-gray-600">
+            Organize and track your tasks efficiently
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <Column
+            title="Upcoming"
+            tasks={upcoming}
+            count={upcoming.length}
+            onToggle={handleToggleComplete}
+          />
+          <Column
+            title="Completed"
+            tasks={completed}
+            count={completed.length}
+            onToggle={handleToggleComplete}
+          />
+          <Column
+            title="Missed"
+            tasks={missed}
+            count={missed.length}
+            onToggle={handleToggleComplete}
+          />
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default TaskManagement;
