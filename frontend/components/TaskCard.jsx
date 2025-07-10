@@ -35,7 +35,7 @@ export default function TaskCard({ task, onToggle, onDelete }) {
         <div className="flex items-center gap-2 ml-3">
           <input
             type="checkbox"
-            checked={task.completed}
+            checked={task.is_completed}
             onChange={() => onToggle(task.id)}
             className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
           />

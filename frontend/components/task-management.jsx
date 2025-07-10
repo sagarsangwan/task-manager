@@ -50,62 +50,72 @@ function TaskManagement() {
   );
 
   const handleToggleComplete = async (id) => {
-    setLoading(true);
-    var cTask = tasks.find((task) => task.id == id);
-    cTask.is_completed = !cTask.is_completed;
-    const result = await updateTasks(cTask);
-    const data = await result.json();
-    if (!result.ok) {
-      toast.error("sorry something went wrong");
-      console.log(data);
-    }
+    try {
+      var cTask = tasks.find((task) => task.id == id);
+      cTask.is_completed = !cTask.is_completed;
+      const result = await updateTasks(cTask);
+      const data = await result.json();
+      if (!result.ok) {
+        toast.error("Sorry, something went wrong updating the task.");
+        console.error("API Error:", data);
+        // await loadTasks();
+        return;
+      }
 
-    toast.success(`${data.title} has been set to ${data.status}`);
-    await loadTasks();
-    setLoading(false);
+      toast.info(`Task has been set to ${data.status}`);
+      await loadTasks();
+    } catch (error) {
+      console.error("Network or unexpected error during toggle:", error);
+      toast.error("An unexpected error occurred.");
+    }
   };
   const handleDelete = async (id) => {
     toast.info("Deleting task...");
 
     try {
       const res = await deleteTask(id);
-      // const data = await res.json();
       if (!res.ok) {
         toast.error("sorry something went wrong");
-        // console.log(data);
+        return;
       }
       toast.success("Task has been deleted.");
+      await loadTasks();
     } catch (error) {
       console.error("Network or unexpected error during delete:", error);
       toast.error("An unexpected error occurred while deleting the task.");
-    } finally {
-      setLoading(false);
-      loadTasks();
+      // await loadTasks();
     }
   };
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    toast.info("Creating task...");
-    const localDate = new Date(newTask.deadline);
-    const utcIsoString = localDate.toISOString();
-    const dataToSend = { ...newTask, deadline: utcIsoString };
-    const result = await AddNewTask(dataToSend);
+    try {
+      toast.info("Creating task...");
+      const localDate = new Date(newTask.deadline);
+      const utcIsoString = localDate.toISOString();
+      const dataToSend = { ...newTask, deadline: utcIsoString };
+      const result = await AddNewTask(dataToSend);
 
-    const data = await result.json();
-    if (!result.ok) {
-      toast.error("sorry something went wrong");
-      console.log(data);
+      const data = await result.json();
+      if (!result.ok) {
+        toast.error("Sorry, something went wrong adding the task.");
+        console.error("API Error:", data);
+        return;
+      }
+      toast.success(`${data.title} has been created`);
+      await loadTasks();
+      setIsModalOpen(false);
+      setNewTask({
+        title: "",
+        description: "",
+        deadline: getLocalDatetimeString(),
+      });
+    } catch (error) {
+      console.error("Network or unexpected error during task creation:", error);
+      toast.error("An unexpected error occurred while adding the task.");
+    } finally {
+      setLoading(false);
     }
-    toast.success(`${data.title} has been created`);
-    await loadTasks();
-    setIsModalOpen(false);
-    setNewTask({
-      title: "",
-      description: "",
-      deadline: getLocalDatetimeString(),
-    });
-    setLoading(false);
   };
   return (
     <div className="min-h-screen  p-4 md:p-6">

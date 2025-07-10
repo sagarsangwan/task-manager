@@ -104,12 +104,11 @@ export default function TaskModal({
             <button
               type="submit"
               className="px-4 py-2 bg-blue-600 text-white rounded-md"
-              disabled={loading} // Optional: Disable the button while loading to prevent multiple submissions
+              disabled={loading}
             >
-              {!loading ? "Add Task" : "Loading..."}{" "}
-              {/* Changed to "Loading..." for better UX */}
+              {!loading ? "Add Task" : "Creating..."}{" "}
             </button>
-            {loading && <p>Adding your task, please wait...</p>}
+            {/* {loading && <p>Adding your task, please wait...</p>} */}
           </div>
         </form>
       </DialogContent>
