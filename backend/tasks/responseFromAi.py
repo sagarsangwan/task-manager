@@ -29,9 +29,7 @@ def classify_priority(title, description):
         priority_output = response.text.strip()
         valid_priorities = {"Low", "Medium", "High", "Critical"}
         if priority_output not in valid_priorities:
-            print(
-                f"Warning: Unexpected priority output from Gemini: '{priority_output}'. Returning 'Medium'."
-            )
+
             return "Medium"
 
         return priority_output

@@ -12,7 +12,6 @@ class TaskViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         task = serializer.save()
         priority = classify_priority(task.title, task.description)
-        print(priority, "respnse from aiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
 
         task.priority = (
             priority if priority in dict(Task.PRIORITY_CHOICES) else "Medium"

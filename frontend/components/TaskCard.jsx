@@ -5,7 +5,6 @@ import { Button } from "./ui/button";
 import { Delete, Trash2 } from "lucide-react";
 
 export default function TaskCard({ task, onToggle, onDelete }) {
-  console.log(task.tags);
   const getPriorityColor = (priority) => {
     switch (priority) {
       case "Critical":

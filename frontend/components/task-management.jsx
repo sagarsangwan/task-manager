@@ -29,12 +29,10 @@ function TaskManagement() {
     deadline: getLocalDatetimeString(),
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
-  console.log(tasks);
 
   const loadTasks = async () => {
     const data = await fetchTasksFromApi();
     setTasks(data);
-    console.log(data);
   };
 
   useEffect(() => {

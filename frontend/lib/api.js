@@ -13,7 +13,6 @@ export async function updateTasks(taskData) {
     },
     body: JSON.stringify(taskData),
   });
-  console.log(res);
   return res;
 }
 
@@ -25,13 +24,11 @@ export async function AddNewTask(newTask) {
     },
     body: JSON.stringify(newTask),
   });
-  console.log(res);
   return res;
 }
 export async function deleteTask(taskId) {
   const res = await fetch(`${API_URL}${taskId}/`, {
     method: "DELETE",
   });
-  console.log(res);
   return res;
 }
