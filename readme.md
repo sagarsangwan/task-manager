@@ -1,5 +1,5 @@
 
-# Time-Aware Task Manager
+# Time-Aware Task Manager [https://task-manager-git-main-sagar-sangwans-projects.vercel.app/]
 
 This is a full-stack task management application with a smart backend and a responsive frontend.
 It includes:
@@ -21,6 +21,12 @@ task-manager/
 ```
 
 ---
+
+## Deploy
+
+Used free tiers from the services - 
+1. Used [vercel](https://vercel.com/) for hosting next.js app. Visit frontend [here](https://task-manager-git-main-sagar-sangwans-projects.vercel.app/)
+2. Used [pythonanywhere](https://www.pythonanywhere.com/) for hosting django app. Visit django APIs [here](https://sagarkush.pythonanywhere.com/api/v1/tasks)
 
 ## How to Set Up and Run the Project
 
